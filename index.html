@@ -2,296 +2,393 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>The Log</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>College Vision Board</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F6F4EE;
-    --paper-raised:#FBFAF6;
-    --ink:#1E2A32;
-    --ink-soft:#4A5860;
-    --sage:#52796F;
-    --sage-deep:#3C5B52;
-    --amber:#C98A3E;
-    --brick:#9C4A3C;
-    --line:#D8D3C7;
-    --line-soft:#E7E3D8;
+    --cork-a:#c78e57;
+    --cork-b:#b47a45;
+    --frame:#5c3a24;
+    --frame-dark:#3f2717;
+    --paper:#fffcf5;
+    --ink:#2b2320;
+    --ink-soft:#5a4d43;
+    --yellow:#ffe08a;
+    --pink:#ffc2d1;
+    --mint:#bfe3c4;
+    --blue:#b7d8f5;
+    --lavender:#dcc9f2;
+    --pin-light:#eee;
+    --pin-dark:#8a8a8a;
   }
+
   *{box-sizing:border-box;}
-  body{
+
+  html,body{
     margin:0;
-    background:var(--paper);
+    padding:0;
+    background:var(--frame-dark);
+    font-family:'Work Sans', sans-serif;
     color:var(--ink);
-    font-family:'Inter',sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:920px;margin:0 auto;padding:36px 24px 80px;}
-
-  /* Masthead */
-  .masthead{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-end;
-    border-bottom:3px solid var(--ink);
-    padding-bottom:16px;
-    margin-bottom:8px;
-  }
-  .masthead h1{
-    font-family:'Source Serif 4',serif;
-    font-weight:700;
-    font-size:2.1rem;
-    margin:0;
-    letter-spacing:-0.01em;
-  }
-  .masthead .sub{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.72rem;
-    color:var(--ink-soft);
-    text-transform:uppercase;
-    letter-spacing:0.08em;
-    margin-top:4px;
-  }
-  .masthead .today{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.78rem;
-    color:var(--ink-soft);
-    text-align:right;
+    overflow-x:hidden;
   }
 
-  /* Summary strip */
-  .summary{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
-    gap:1px;
-    background:var(--line);
-    border:1px solid var(--line);
-    margin:24px 0 32px;
-  }
-  .summary .cell{
-    background:var(--paper-raised);
-    padding:14px 12px;
-  }
-  .summary .cell .num{
-    font-family:'IBM Plex Mono',monospace;
-    font-weight:600;
-    font-size:1.5rem;
-    line-height:1;
-  }
-  .summary .cell .label{
-    font-size:0.68rem;
-    color:var(--ink-soft);
-    text-transform:uppercase;
-    letter-spacing:0.06em;
-    margin-top:6px;
-  }
-  .summary .cell.total{background:var(--ink);}
-  .summary .cell.total .num,.summary .cell.total .label{color:var(--paper);}
-
-  /* Section headers */
-  .section-label{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.72rem;
-    text-transform:uppercase;
-    letter-spacing:0.1em;
-    color:var(--ink-soft);
-    margin:32px 0 10px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-  .section-label::after{
-    content:"";
-    flex:1;
-    height:1px;
-    background:var(--line);
+  .frame{
+    position:relative;
+    margin:14px;
+    border-radius:6px;
+    padding:16px;
+    background:
+      linear-gradient(135deg, #7a5236, #4c2f1c 60%, #3a2314);
+    box-shadow:
+      0 20px 50px rgba(0,0,0,0.5),
+      inset 0 0 0 2px rgba(0,0,0,0.35),
+      inset 0 0 30px rgba(0,0,0,0.4);
   }
 
-  /* Form */
-  .form-card{
-    background:var(--paper-raised);
-    border:1px solid var(--line);
-    padding:20px;
-  }
-  .form-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px;
-  }
-  .field{display:flex;flex-direction:column;gap:5px;}
-  .field.span2{grid-column:1/-1;}
-  .field label{
-    font-size:0.7rem;
-    text-transform:uppercase;
-    letter-spacing:0.05em;
-    color:var(--ink-soft);
-    font-weight:600;
-  }
-  .field input,.field select,.field textarea{
-    font-family:'Inter',sans-serif;
-    font-size:0.92rem;
-    padding:9px 10px;
-    border:1px solid var(--line);
-    background:var(--paper);
-    color:var(--ink);
+  .board-wrap{
+    position:relative;
     border-radius:2px;
+    overflow:hidden;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.45);
   }
-  .field input:focus,.field select:focus,.field textarea:focus{
-    outline:2px solid var(--sage);
-    outline-offset:1px;
-  }
-  .field textarea{resize:vertical;min-height:52px;font-family:'Inter',sans-serif;}
-  .form-actions{
-    margin-top:16px;
-    display:flex;
-    justify-content:flex-end;
-    gap:10px;
-  }
-  button{
-    font-family:'Inter',sans-serif;
-    font-weight:600;
-    font-size:0.85rem;
-    padding:10px 18px;
-    border:none;
-    border-radius:2px;
-    cursor:pointer;
-  }
-  .btn-primary{background:var(--sage);color:#fff;}
-  .btn-primary:hover{background:var(--sage-deep);}
-  .btn-ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--line);}
-  .btn-ghost:hover{border-color:var(--ink-soft);color:var(--ink);}
 
-  /* Entries */
-  .entry{
-    display:flex;
-    border:1px solid var(--line);
-    border-top:none;
-    background:var(--paper-raised);
+  .board{
+    position:relative;
+    min-height:1500px;
+    background-color:var(--cork-a);
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(90,55,25,0.35) 0, transparent 3px),
+      radial-gradient(circle at 40% 65%, rgba(90,55,25,0.3) 0, transparent 2.5px),
+      radial-gradient(circle at 70% 30%, rgba(90,55,25,0.32) 0, transparent 3px),
+      radial-gradient(circle at 85% 75%, rgba(90,55,25,0.28) 0, transparent 2px),
+      radial-gradient(circle at 55% 10%, rgba(90,55,25,0.3) 0, transparent 2.5px),
+      radial-gradient(circle at 25% 85%, rgba(90,55,25,0.3) 0, transparent 3px),
+      radial-gradient(circle at 90% 15%, rgba(90,55,25,0.25) 0, transparent 2px),
+      linear-gradient(135deg, var(--cork-a), var(--cork-b));
+    background-size:
+      60px 60px, 70px 70px, 55px 55px, 65px 65px, 80px 80px, 50px 50px, 75px 75px, 100% 100%;
+    touch-action:none;
   }
-  .entry:first-of-type{border-top:1px solid var(--line);}
-  .flag{
-    width:6px;
-    flex-shrink:0;
-  }
-  .entry-body{
-    flex:1;
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:16px;
-    padding:14px 16px;
-  }
-  .entry-main .top-row{
-    display:flex;
-    align-items:baseline;
-    gap:10px;
-    flex-wrap:wrap;
-  }
-  .entry-main .name{
-    font-family:'Source Serif 4',serif;
-    font-weight:600;
-    font-size:1.02rem;
-  }
-  .entry-main .cat-tag{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.62rem;
-    text-transform:uppercase;
-    letter-spacing:0.05em;
-    padding:2px 6px;
-    border-radius:2px;
-    color:#fff;
-  }
-  .entry-main .org{
-    font-size:0.85rem;
-    color:var(--ink-soft);
-    margin-top:3px;
-  }
-  .entry-main .notes{
-    font-size:0.83rem;
-    color:var(--ink-soft);
-    margin-top:6px;
-    font-style:italic;
-  }
-  .entry-meta{
-    text-align:right;
-    flex-shrink:0;
-    display:flex;
-    flex-direction:column;
-    align-items:flex-end;
-    gap:4px;
-  }
-  .entry-meta .hours{
-    font-family:'IBM Plex Mono',monospace;
-    font-weight:600;
-    font-size:1.1rem;
-  }
-  .entry-meta .date{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.72rem;
-    color:var(--ink-soft);
-  }
-  .entry-meta .del{
-    font-size:0.7rem;
-    color:var(--brick);
-    background:none;
-    border:none;
-    padding:2px 0;
-    cursor:pointer;
-    font-family:'Inter',sans-serif;
-    font-weight:500;
-  }
-  .entry-meta .del:hover{text-decoration:underline;}
 
-  .empty{
-    border:1px dashed var(--line);
-    padding:32px;
+  /* header inside board */
+  .board-header{
+    position:relative;
+    z-index:5;
+    padding:34px 40px 10px;
     text-align:center;
-    color:var(--ink-soft);
-    font-size:0.9rem;
-  }
-
-  .footer-actions{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-top:20px;
-    gap:12px;
-    flex-wrap:wrap;
-  }
-  .footer-actions .hint{
-    font-size:0.72rem;
-    color:var(--ink-soft);
-  }
-
-  .toast{
-    position:fixed;
-    bottom:24px;
-    left:50%;
-    transform:translateX(-50%) translateY(20px);
-    background:var(--ink);
-    color:var(--paper);
-    padding:10px 18px;
-    border-radius:3px;
-    font-size:0.85rem;
-    opacity:0;
-    transition:opacity 0.25s ease, transform 0.25s ease;
     pointer-events:none;
   }
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .board-header h1{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size:56px;
+    margin:0 0 2px;
+    color:#fff8ea;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.25);
+    transform: rotate(-1.2deg);
+    letter-spacing:0.5px;
+  }
+  .board-header .sub{
+    font-family:'Work Sans', sans-serif;
+    font-size:14px;
+    letter-spacing:2.5px;
+    text-transform:uppercase;
+    color:#fbe9cf;
+    opacity:0.85;
+    pointer-events:auto;
+  }
+  .board-header .sub input{
+    background:transparent;
+    border:none;
+    border-bottom:1px dashed rgba(255,255,255,0.5);
+    color:#fff8ea;
+    font-family:'Work Sans', sans-serif;
+    font-size:14px;
+    letter-spacing:2.5px;
+    text-transform:uppercase;
+    width:56px;
+    text-align:center;
+  }
+  .board-header .sub input:focus{outline:none; border-bottom-color:#fff;}
 
-  @media (max-width:560px){
-    .form-grid{grid-template-columns:1fr;}
-    .masthead{flex-direction:column;align-items:flex-start;gap:6px;}
-    .masthead .today{text-align:left;}
-    .entry-body{flex-direction:column;}
-    .entry-meta{flex-direction:row;align-items:center;width:100%;justify-content:space-between;}
+  /* toolbar */
+  .toolbar{
+    position:sticky;
+    top:0;
+    z-index:50;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+    padding:12px 16px;
+    background:linear-gradient(180deg, #4c2f1c, #43291a);
+    border-bottom:2px solid var(--frame-dark);
+  }
+  .toolbar .group{
+    display:flex;
+    gap:6px;
+    align-items:center;
+  }
+  .tb-btn{
+    font-family:'Work Sans', sans-serif;
+    font-size:13px;
+    font-weight:600;
+    color:#3a2a1a;
+    background:var(--paper);
+    border:none;
+    border-radius:4px;
+    padding:8px 12px;
+    cursor:pointer;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.25);
+    transition: transform 0.08s ease, box-shadow 0.08s ease;
+    white-space:nowrap;
+  }
+  .tb-btn:hover{ transform: translateY(-1px); box-shadow: 0 3px 0 rgba(0,0,0,0.3); }
+  .tb-btn:active{ transform: translateY(1px); box-shadow: 0 1px 0 rgba(0,0,0,0.3); }
+  .tb-btn.goal{background:var(--yellow);}
+  .tb-btn.photo{background:var(--blue);}
+  .tb-btn.quote{background:var(--lavender);}
+  .tb-btn.checklist{background:var(--mint);}
+
+  .tb-spacer{flex:1;}
+  .save-status{
+    font-size:12px;
+    color:#e6d3bd;
+    font-style:italic;
+    min-width:70px;
+    text-align:right;
+  }
+  .clear-btn{
+    background:transparent;
+    color:#e6c9c9;
+    border:1px solid rgba(230,201,201,0.4);
+    border-radius:4px;
+    font-size:12px;
+    padding:7px 10px;
+    cursor:pointer;
+    font-family:'Work Sans', sans-serif;
+  }
+  .clear-btn:hover{ background:rgba(255,255,255,0.06); }
+
+  /* card base */
+  .card{
+    position:absolute;
+    width:220px;
+    padding:16px 14px 14px;
+    background:var(--paper);
+    box-shadow:
+      0 10px 18px rgba(0,0,0,0.35),
+      0 2px 4px rgba(0,0,0,0.2);
+    cursor:grab;
+    user-select:none;
+    z-index:2;
+  }
+  .card.dragging{ cursor:grabbing; box-shadow: 0 22px 30px rgba(0,0,0,0.45); z-index:999 !important; }
+  .card.photo-card{ width:240px; }
+
+  .washi{
+    position:absolute;
+    top:-11px;
+    left:50%;
+    transform: translateX(-50%) rotate(-3deg);
+    min-width:78px;
+    max-width:150px;
+    padding:5px 10px;
+    text-align:center;
+    font-size:10.5px;
+    letter-spacing:1.2px;
+    text-transform:uppercase;
+    font-weight:600;
+    color:#4a3a20;
+    opacity:0.92;
+    box-shadow:0 1px 2px rgba(0,0,0,0.15);
+  }
+  .washi[contenteditable="true"]{cursor:text;}
+  .washi.c-yellow{background: repeating-linear-gradient(45deg, #ffd75e, #ffd75e 6px, #ffcf3f 6px, #ffcf3f 12px); }
+  .washi.c-pink{background: repeating-linear-gradient(45deg, #ff9fb8, #ff9fb8 6px, #ff8aa8 6px, #ff8aa8 12px); }
+  .washi.c-mint{background: repeating-linear-gradient(45deg, #8fd2a0, #8fd2a0 6px, #7bc790 6px, #7bc790 12px); }
+  .washi.c-blue{background: repeating-linear-gradient(45deg, #8fc1ee, #8fc1ee 6px, #7bb3e6 6px, #7bb3e6 12px); }
+  .washi.c-lavender{background: repeating-linear-gradient(45deg, #c8a8ec, #c8a8ec 6px, #bd97e8 6px, #bd97e8 12px); }
+
+  .pin{
+    position:absolute;
+    top:-16px;
+    left:50%;
+    transform:translateX(-50%);
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #fff, var(--pin-light) 40%, var(--pin-dark) 100%);
+    box-shadow: 0 3px 4px rgba(0,0,0,0.45);
+    z-index:3;
   }
 
-  /* Lock screen */
+  .card-body{
+    margin-top:10px;
+    font-size:15px;
+    line-height:1.4;
+    color:var(--ink);
+    min-height:40px;
+    outline:none;
+  }
+  .card-body[contenteditable="true"]:empty:before{
+    content: attr(data-placeholder);
+    color:#a89a89;
+  }
+
+  .quote-card .card-body{
+    font-family:'Caveat', cursive;
+    font-size:24px;
+    font-weight:600;
+    text-align:center;
+    color:#3a2a4a;
+    line-height:1.25;
+  }
+
+  .swatches{
+    display:flex;
+    gap:6px;
+    margin-top:12px;
+    justify-content:center;
+  }
+  .swatch{
+    width:14px;height:14px;border-radius:50%;
+    border:1px solid rgba(0,0,0,0.15);
+    cursor:pointer;
+  }
+  .swatch.sw-yellow{background:var(--yellow);}
+  .swatch.sw-pink{background:var(--pink);}
+  .swatch.sw-mint{background:var(--mint);}
+  .swatch.sw-blue{background:var(--blue);}
+  .swatch.sw-lavender{background:var(--lavender);}
+
+  .del-btn{
+    position:absolute;
+    top:4px;
+    right:6px;
+    border:none;
+    background:transparent;
+    color:#b7a58f;
+    font-size:15px;
+    cursor:pointer;
+    line-height:1;
+    padding:2px 5px;
+    opacity:0;
+    transition:opacity 0.15s ease;
+  }
+  .card:hover .del-btn{opacity:1;}
+  .del-btn:hover{color:#a13d3d;}
+
+  /* photo card specifics */
+  .photo-frame{
+    width:100%;
+    aspect-ratio: 4/3;
+    background:#eee4d3;
+    border:1px solid #d8c9ae;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    margin-top:6px;
+  }
+  .photo-frame img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    pointer-events:none;
+  }
+  .photo-frame .ph-empty{
+    font-size:11px;
+    color:#a08f76;
+    text-align:center;
+    padding:10px;
+    font-family:'Work Sans', sans-serif;
+  }
+  .url-input{
+    width:100%;
+    margin-top:8px;
+    font-size:11px;
+    font-family:'Work Sans', sans-serif;
+    padding:5px 6px;
+    border:1px solid #ddd0ba;
+    border-radius:3px;
+    color:#5a4d3f;
+    background:#fffef9;
+  }
+  .caption{
+    margin-top:8px;
+    font-size:13px;
+    text-align:center;
+    font-style:italic;
+    color:var(--ink-soft);
+    outline:none;
+  }
+  .caption[contenteditable="true"]:empty:before{
+    content:attr(data-placeholder);
+    color:#b7a891;
+  }
+
+  /* checklist */
+  .checklist{
+    margin-top:8px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .cl-item{
+    display:flex;
+    align-items:flex-start;
+    gap:7px;
+    font-size:13.5px;
+  }
+  .cl-item input[type=checkbox]{
+    margin-top:3px;
+    accent-color:#6b9e73;
+    cursor:pointer;
+  }
+  .cl-item .cl-text{
+    flex:1;
+    outline:none;
+  }
+  .cl-item.done .cl-text{
+    text-decoration:line-through;
+    color:#9a8f81;
+  }
+  .cl-item .cl-del{
+    border:none;background:none;color:#c2b6a4;cursor:pointer;font-size:13px;padding:0 2px;
+  }
+  .cl-item .cl-del:hover{color:#a13d3d;}
+  .add-item-btn{
+    margin-top:4px;
+    font-size:12px;
+    background:none;
+    border:none;
+    color:#6b5a44;
+    text-decoration:underline;
+    cursor:pointer;
+    padding:0;
+    text-align:left;
+    font-family:'Work Sans', sans-serif;
+  }
+
+  @media (max-width:640px){
+    .board-header h1{font-size:38px;}
+    .toolbar{gap:6px;}
+    .tb-btn{padding:7px 9px; font-size:12px;}
+    .card{width:180px;}
+    .card.photo-card{width:190px;}
+  }
+
+  ::selection{ background: #ffdf8f; }
+
   .lock-overlay{
     position:fixed;
     inset:0;
-    background:var(--ink);
+    background:var(--frame-dark);
     display:flex;
     align-items:center;
     justify-content:center;
@@ -300,73 +397,68 @@
   }
   .lock-card{
     position:relative;
-    width:300px;
-    background:var(--paper-raised);
-    border:1px solid var(--line);
-    border-top:4px solid var(--sage);
-    padding:28px 24px 24px;
+    width:280px;
+    background:var(--paper);
+    padding:30px 24px 24px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.5);
     text-align:center;
   }
-  .lock-card .tab{
+  .lock-card .pin{ top:-16px; }
+  .lock-card .washi{
     position:absolute;
-    top:-13px;
+    top:-11px;
     left:50%;
-    transform:translateX(-50%);
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.62rem;
+    transform:translateX(-50%) rotate(-3deg);
+    padding:5px 14px;
+    font-size:10.5px;
+    letter-spacing:1.2px;
     text-transform:uppercase;
-    letter-spacing:0.08em;
-    color:#fff;
-    background:var(--sage);
-    padding:3px 10px;
-    border-radius:2px;
+    font-weight:600;
+    color:#4a3a20;
+    background: repeating-linear-gradient(45deg, #ffd75e, #ffd75e 6px, #ffcf3f 6px, #ffcf3f 12px);
   }
   .lock-card h2{
-    font-family:'Source Serif 4',serif;
-    font-weight:600;
-    font-size:1.4rem;
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size:30px;
     margin:14px 0 4px;
     color:var(--ink);
   }
   .lock-card p{
-    font-size:0.8rem;
+    font-size:12.5px;
     color:var(--ink-soft);
-    margin:0 0 18px;
+    margin:0 0 16px;
   }
   .lock-card input{
     width:100%;
-    font-family:'Inter',sans-serif;
-    font-size:0.92rem;
     padding:9px 10px;
     margin-bottom:10px;
-    border:1px solid var(--line);
-    background:var(--paper);
-    color:var(--ink);
-    border-radius:2px;
+    border:1px solid #ddd0ba;
+    border-radius:3px;
+    font-family:'Work Sans', sans-serif;
+    font-size:14px;
     text-align:center;
-  }
-  .lock-card input:focus{
-    outline:2px solid var(--sage);
-    outline-offset:1px;
+    background:#fffef9;
   }
   .lock-card button{
     width:100%;
+    font-family:'Work Sans', sans-serif;
+    font-size:13px;
+    font-weight:600;
+    color:#3a2a1a;
+    background:var(--yellow);
+    border:none;
+    border-radius:4px;
+    padding:9px 12px;
+    cursor:pointer;
+    box-shadow:0 2px 0 rgba(0,0,0,0.25);
   }
+  .lock-card button:hover{ background:#ffd873; }
   .lock-error{
-    color:var(--brick);
-    font-size:0.78rem;
+    color:#a13d3d;
+    font-size:12px;
     min-height:16px;
     margin-top:10px;
-  }
-  .lock-forgot{
-    margin-top:14px;
-    font-size:0.72rem;
-    color:var(--ink-soft);
-    background:none;
-    border:none;
-    text-decoration:underline;
-    cursor:pointer;
-    font-family:'Inter',sans-serif;
   }
 </style>
 </head>
@@ -374,378 +466,508 @@
 
 <div class="lock-overlay" id="lockSetup" style="display:none;">
   <div class="lock-card">
-    <div class="tab">new log</div>
+    <div class="pin"></div>
+    <div class="washi">new board</div>
     <h2>Set a password</h2>
-    <p>This locks your log on this device. There's no account recovery — if you forget it, you'll need to reset the log.</p>
-    <input type="password" id="setupPass" placeholder="Choose a password" autocomplete="new-password">
-    <input type="password" id="setupPassConfirm" placeholder="Confirm password" autocomplete="new-password">
-    <button class="btn-primary" onclick="handleSetup()">Save &amp; continue</button>
+    <p>This locks your vision board on this device.</p>
+    <input type="password" id="setupPass" placeholder="Choose a password">
+    <button onclick="handleSetup()">Save &amp; continue</button>
     <p class="lock-error" id="setupError"></p>
   </div>
 </div>
 
 <div class="lock-overlay" id="lockLogin" style="display:none;">
   <div class="lock-card">
-    <div class="tab">locked</div>
+    <div class="pin"></div>
+    <div class="washi">locked</div>
     <h2>Welcome back</h2>
-    <p>Enter your password to open your log.</p>
-    <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')handleLogin()">
-    <button class="btn-primary" onclick="handleLogin()">Unlock</button>
+    <p>Enter your password to see your board.</p>
+    <input type="password" id="loginPass" placeholder="Password" onkeydown="if(event.key==='Enter')handleLogin()">
+    <button onclick="handleLogin()">Unlock</button>
     <p class="lock-error" id="loginError"></p>
-    <button class="lock-forgot" onclick="handleForgot()">Forgot password? Reset the log</button>
   </div>
 </div>
 
-<div class="wrap" id="app" style="display:none;">
-
-  <div class="masthead">
-    <div>
-      <h1>The Log</h1>
-      <div class="sub">Clinical &amp; premed activity record</div>
+<div id="app" style="display:none;">
+<div class="frame">
+  <div class="board-wrap">
+    <div class="toolbar">
+      <div class="group">
+        <button class="tb-btn goal" data-add="goal">+ Goal</button>
+        <button class="tb-btn photo" data-add="photo">+ Photo</button>
+        <button class="tb-btn quote" data-add="quote">+ Quote</button>
+        <button class="tb-btn checklist" data-add="checklist">+ Checklist</button>
+      </div>
+      <div class="tb-spacer"></div>
+      <button class="clear-btn" id="exportBoard">Export</button>
+      <button class="clear-btn" id="importBoard">Import</button>
+      <input type="file" id="importFile" accept="application/json" style="display:none;">
+      <span class="save-status" id="saveStatus">loading…</span>
+      <button class="clear-btn" id="clearBoard">Clear board</button>
     </div>
-    <div class="today" id="todayDate"></div>
-  </div>
 
-  <div class="summary" id="summary"></div>
-
-  <div class="section-label">New entry</div>
-  <div class="form-card">
-    <div class="form-grid">
-      <div class="field span2">
-        <label for="f-name">Activity name</label>
-        <input id="f-name" type="text" placeholder="e.g. ER volunteer, Dr. Alvarez shadowing">
+    <div class="board" id="board">
+      <div class="board-header">
+        <h1>My College Vision Board</h1>
+        <div class="sub">Class of <input id="gradYear" type="text" maxlength="4" value="2030"></div>
       </div>
-      <div class="field">
-        <label for="f-cat">AMCAS category</label>
-        <select id="f-cat">
-          <option value="clinical-paid">Clinical (Paid)</option>
-          <option value="clinical-volunteer">Clinical (Volunteer)</option>
-          <option value="nonclinical-volunteer">Non-Clinical Volunteering</option>
-          <option value="shadowing">Physician Shadowing</option>
-          <option value="research">Research</option>
-          <option value="leadership">Leadership / Teaching</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="f-org">Organization</label>
-        <input id="f-org" type="text" placeholder="e.g. Memorial Hospital">
-      </div>
-      <div class="field">
-        <label for="f-date">Date</label>
-        <input id="f-date" type="date">
-      </div>
-      <div class="field">
-        <label for="f-hours">Hours</label>
-        <input id="f-hours" type="number" step="0.25" min="0" placeholder="3.5">
-      </div>
-      <div class="field span2">
-        <label for="f-notes">Notes (supervisor, what you did, contact info)</label>
-        <textarea id="f-notes" placeholder="Optional — helpful to have for your AMCAS descriptions later"></textarea>
-      </div>
-    </div>
-    <div class="form-actions">
-      <button class="btn-ghost" id="clearForm">Clear</button>
-      <button class="btn-primary" id="addEntry">Log entry</button>
+      <!-- cards injected here -->
     </div>
   </div>
-
-  <div class="section-label">Entries</div>
-  <div id="entries"></div>
-
-  <div class="footer-actions">
-    <div class="hint" id="storageHint">Loading your log…</div>
-    <div style="display:flex;gap:10px;">
-      <button class="btn-ghost" id="exportBtn">Copy summary</button>
-      <button class="btn-ghost" id="resetBtn">Clear all data</button>
-    </div>
-  </div>
-
 </div>
-
-<div class="toast" id="toast"></div>
+</div>
 
 <script>
-const CATS = {
-  "clinical-paid":        { label: "Clinical (Paid)",         color: "#52796F" },
-  "clinical-volunteer":   { label: "Clinical (Vol.)",         color: "#3C5B52" },
-  "nonclinical-volunteer":{ label: "Non-Clinical Vol.",       color: "#C98A3E" },
-  "shadowing":            { label: "Shadowing",               color: "#9C4A3C" },
-  "research":             { label: "Research",                color: "#4A5860" },
-  "leadership":           { label: "Leadership",              color: "#1E2A32" },
-  "other":                { label: "Other",                   color: "#8A8172" }
-};
+(function(){
+  const board = document.getElementById('board');
+  const saveStatus = document.getElementById('saveStatus');
+  const gradYearInput = document.getElementById('gradYear');
+  const STORAGE_KEY = 'vision-board-state';
 
-let entries = [];
-const STORAGE_KEY = 'premed-log-entries';
-const PASS_KEY = 'premed-log-password-hash';
+  const COLORS = ['yellow','pink','mint','blue','lavender'];
+  let topZ = 10;
+  let saveTimer = null;
 
-const $ = (id) => document.getElementById(id);
+  const uid = () => 'c' + Math.random().toString(36).slice(2,10);
 
-async function sha256(text){
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
+  function starterCards(){
+    return [
+      {id:uid(), type:'goal', x:60, y:130, rot:-2.5, color:'yellow', label:'college', text:'Get into my dream school'},
+      {id:uid(), type:'goal', x:340, y:90, rot:2, color:'blue', label:'career', text:'Land an internship in my field by sophomore year'},
+      {id:uid(), type:'quote', x:640, y:150, rot:-1.5, color:'lavender', label:'mindset', text:'Small steps every day beat big leaps once in a while.'},
+      {id:uid(), type:'checklist', x:80, y:400, rot:1.5, color:'mint', label:'freshman year', items:[
+        {text:'Ace orientation week', done:false},
+        {text:'Join one club', done:false},
+        {text:'Find my favorite study spot', done:false},
+        {text:'Meet my advisor', done:false}
+      ]},
+      {id:uid(), type:'photo', x:400, y:380, rot:2.5, color:'pink', label:'dream campus', imageUrl:'', caption:'Paste a photo link here'}
+    ];
+  }
 
-async function initAuth(){
-  if(typeof crypto === 'undefined' || !crypto.subtle){
-    // no crypto available — skip the lock rather than block access
-    unlockApp();
-    return;
-  }
-  let stored = null;
-  try{
-    stored = await window.storage.get(PASS_KEY, false);
-  }catch(e){
-    stored = null; // key doesn't exist yet
-  }
-  if(!stored){
-    $('lockSetup').style.display = 'flex';
-    $('setupPass').focus();
-  }else{
-    window._storedHash = stored.value;
-    $('lockLogin').style.display = 'flex';
-    $('loginPass').focus();
-  }
-}
+  let state = { gradYear:'2030', cards: [] };
 
-async function handleSetup(){
-  const pass = $('setupPass').value;
-  const confirm = $('setupPassConfirm').value;
-  if(!pass || pass.length < 4){
-    $('setupError').textContent = 'Use at least 4 characters.';
-    return;
+  let storageWorking = true;
+
+  const PASS_KEY = 'vision-board-password-hash';
+
+  async function sha256(text){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
   }
-  if(pass !== confirm){
-    $('setupError').textContent = "Passwords don't match.";
-    return;
-  }
-  const hash = await sha256(pass);
-  try{
-    const result = await window.storage.set(PASS_KEY, hash, false);
-    if(!result){
-      $('setupError').textContent = 'Could not save password — try again.';
+
+  async function initAuth(){
+    if(typeof window.storage === 'undefined' || typeof crypto === 'undefined' || !crypto.subtle){
+      // no persistent storage or no crypto available — skip the lock rather than block access
+      unlockApp();
       return;
     }
-  }catch(e){
-    $('setupError').textContent = 'Could not save password — try again.';
-    return;
-  }
-  $('lockSetup').style.display = 'none';
-  unlockApp();
-}
+    let storedHash = null;
+    try{
+      const res = await window.storage.get(PASS_KEY, false);
+      storedHash = res ? res.value : null;
+    }catch(e){ storedHash = null; }
 
-async function handleLogin(){
-  const pass = $('loginPass').value;
-  const hash = await sha256(pass);
-  if(hash === window._storedHash){
-    $('lockLogin').style.display = 'none';
-    unlockApp();
-  }else{
-    $('loginError').textContent = 'Incorrect password.';
-    $('loginPass').value = '';
-    $('loginPass').focus();
-  }
-}
-
-async function handleForgot(){
-  if(!confirm('Reset your password? This does NOT delete your logged entries, but you\'ll set a new password now.')) return;
-  try{
-    await window.storage.delete(PASS_KEY, false);
-  }catch(e){ /* ignore */ }
-  $('lockLogin').style.display = 'none';
-  $('lockSetup').style.display = 'flex';
-  $('setupPass').focus();
-}
-
-function unlockApp(){
-  $('app').style.display = 'block';
-  loadEntries();
-}
-
-function todayStr(){
-  const d = new Date();
-  return d.toLocaleDateString('en-US',{weekday:'long', year:'numeric', month:'long', day:'numeric'});
-}
-$('todayDate').textContent = todayStr();
-$('f-date').value = new Date().toISOString().slice(0,10);
-
-function showToast(msg){
-  const t = $('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 1800);
-}
-
-async function loadEntries(){
-  try{
-    const res = await window.storage.get(STORAGE_KEY, false);
-    entries = res ? JSON.parse(res.value) : [];
-  }catch(e){
-    entries = [];
-  }
-  $('storageHint').textContent = 'Saved automatically to your account.';
-  render();
-}
-
-async function saveEntries(){
-  try{
-    const result = await window.storage.set(STORAGE_KEY, JSON.stringify(entries), false);
-    if(!result){
-      $('storageHint').textContent = 'Could not save — check connection.';
+    if(!storedHash){
+      document.getElementById('lockSetup').style.display = 'flex';
+    }else{
+      window._storedHash = storedHash;
+      document.getElementById('lockLogin').style.display = 'flex';
+      document.getElementById('loginPass').focus();
     }
-  }catch(e){
-    $('storageHint').textContent = 'Could not save — check connection.';
   }
-}
 
-function render(){
-  // summary
-  const totals = {};
-  let grand = 0;
-  entries.forEach(e=>{
-    totals[e.cat] = (totals[e.cat]||0) + Number(e.hours);
-    grand += Number(e.hours);
-  });
-  const summaryEl = $('summary');
-  summaryEl.innerHTML = '';
-  Object.keys(CATS).forEach(key=>{
-    const cell = document.createElement('div');
-    cell.className = 'cell';
-    cell.innerHTML = `<div class="num">${(totals[key]||0).toFixed(1)}</div><div class="label">${CATS[key].label}</div>`;
-    summaryEl.appendChild(cell);
-  });
-  const totalCell = document.createElement('div');
-  totalCell.className = 'cell total';
-  totalCell.innerHTML = `<div class="num">${grand.toFixed(1)}</div><div class="label">Total hours</div>`;
-  summaryEl.appendChild(totalCell);
-
-  // entries list
-  const list = $('entries');
-  list.innerHTML = '';
-  if(entries.length === 0){
-    list.innerHTML = '<div class="empty">No entries yet. Log your first activity above — future you will thank you.</div>';
-    return;
+  async function handleSetup(){
+    const pass = document.getElementById('setupPass').value;
+    if(!pass || pass.length < 4){
+      document.getElementById('setupError').textContent = 'Use at least 4 characters.';
+      return;
+    }
+    const hash = await sha256(pass);
+    try{
+      await window.storage.set(PASS_KEY, hash, false);
+    }catch(e){
+      document.getElementById('setupError').textContent = "Couldn't save a password right now.";
+      return;
+    }
+    document.getElementById('lockSetup').style.display = 'none';
+    unlockApp();
   }
-  const sorted = [...entries].sort((a,b)=> new Date(b.date) - new Date(a.date));
-  sorted.forEach(e=>{
-    const cat = CATS[e.cat] || CATS.other;
-    const row = document.createElement('div');
-    row.className = 'entry';
-    row.innerHTML = `
-      <div class="flag" style="background:${cat.color}"></div>
-      <div class="entry-body">
-        <div class="entry-main">
-          <div class="top-row">
-            <span class="name">${escapeHtml(e.name)}</span>
-            <span class="cat-tag" style="background:${cat.color}">${cat.label}</span>
-          </div>
-          <div class="org">${escapeHtml(e.org || '—')}</div>
-          ${e.notes ? `<div class="notes">${escapeHtml(e.notes)}</div>` : ''}
-        </div>
-        <div class="entry-meta">
-          <div class="hours">${Number(e.hours).toFixed(2)}h</div>
-          <div class="date">${formatDate(e.date)}</div>
-          <button class="del" data-id="${e.id}">Delete</button>
-        </div>
+
+  async function handleLogin(){
+    const pass = document.getElementById('loginPass').value;
+    const hash = await sha256(pass);
+    if(hash === window._storedHash){
+      document.getElementById('lockLogin').style.display = 'none';
+      unlockApp();
+    }else{
+      document.getElementById('loginError').textContent = 'Incorrect password.';
+      document.getElementById('loginPass').value = '';
+      document.getElementById('loginPass').focus();
+    }
+  }
+
+  function unlockApp(){
+    document.getElementById('app').style.display = 'block';
+    load();
+  }
+
+  window.handleSetup = handleSetup;
+  window.handleLogin = handleLogin;
+
+  async function load(){
+    if(typeof window.storage === 'undefined'){
+      storageWorking = false;
+      state = { gradYear:'2030', cards: starterCards() };
+      gradYearInput.value = state.gradYear;
+      renderAll();
+      saveStatus.textContent = 'no storage — session only';
+      return;
+    }
+    try{
+      const res = await window.storage.get(STORAGE_KEY, false);
+      if(res && res.value){
+        const parsed = JSON.parse(res.value);
+        if(parsed && Array.isArray(parsed.cards)){
+          state = parsed;
+        } else {
+          state = { gradYear:'2030', cards: starterCards() };
+        }
+      } else {
+        state = { gradYear:'2030', cards: starterCards() };
+      }
+      setSaved(true);
+    }catch(e){
+      // a throw here on first load usually just means the key doesn't exist yet
+      state = { gradYear:'2030', cards: starterCards() };
+      setSaved(true);
+    }
+    gradYearInput.value = state.gradYear || '2030';
+    renderAll();
+  }
+
+  function scheduleSave(){
+    if(!storageWorking){
+      saveStatus.textContent = 'no storage — session only';
+      return;
+    }
+    setSaved(false);
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async ()=>{
+      try{
+        const result = await window.storage.set(STORAGE_KEY, JSON.stringify(state), false);
+        if(!result){
+          saveStatus.textContent = 'save failed (no result)';
+          return;
+        }
+        setSaved(true);
+      }catch(e){
+        console.error('Vision board save error:', e);
+        saveStatus.textContent = 'save failed: ' + (e && e.message ? e.message : 'unknown error');
+      }
+    }, 500);
+  }
+
+  function setSaved(saved){
+    saveStatus.textContent = saved ? 'saved ✓' : 'saving…';
+  }
+
+  function renderAll(){
+    document.querySelectorAll('.card').forEach(el=>el.remove());
+    state.cards.forEach(c=> board.appendChild(buildCard(c)));
+  }
+
+  function buildCard(c){
+    const el = document.createElement('div');
+    el.className = 'card' + (c.type==='photo' ? ' photo-card' : '') + (c.type==='quote' ? ' quote-card' : '');
+    el.style.left = c.x + 'px';
+    el.style.top = c.y + 'px';
+    el.style.transform = 'rotate(' + c.rot + 'deg)';
+    el.style.background = 'var(--paper)';
+    el.dataset.id = c.id;
+    topZ += 1;
+    el.style.zIndex = topZ;
+
+    el.innerHTML = `
+      <div class="pin"></div>
+      <div class="washi c-${c.color}" contenteditable="true" data-field="label">${escapeHtml(c.label || '')}</div>
+      <button class="del-btn" title="Remove">✕</button>
+      ${cardInner(c)}
+      <div class="swatches">
+        ${COLORS.map(col=>`<span class="swatch sw-${col}" data-color="${col}"></span>`).join('')}
       </div>
     `;
-    list.appendChild(row);
-  });
 
-  list.querySelectorAll('.del').forEach(btn=>{
-    btn.addEventListener('click', async ()=>{
-      entries = entries.filter(en => en.id !== btn.dataset.id);
-      await saveEntries();
-      render();
-      showToast('Entry deleted');
+    // delete
+    el.querySelector('.del-btn').addEventListener('click', (e)=>{
+      e.stopPropagation();
+      state.cards = state.cards.filter(x=>x.id!==c.id);
+      el.remove();
+      scheduleSave();
+    });
+
+    // color swatches
+    el.querySelectorAll('.swatch').forEach(sw=>{
+      sw.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        c.color = sw.dataset.color;
+        const washi = el.querySelector('.washi');
+        washi.className = 'washi c-' + c.color;
+        scheduleSave();
+      });
+    });
+
+    // label edit
+    const washiEl = el.querySelector('.washi');
+    washiEl.addEventListener('pointerdown', e=> e.stopPropagation());
+    washiEl.addEventListener('blur', ()=>{
+      c.label = washiEl.textContent.trim();
+      scheduleSave();
+    });
+
+    wireInner(el, c);
+    wireDrag(el, c);
+
+    return el;
+  }
+
+  function cardInner(c){
+    if(c.type==='goal'){
+      return `<div class="card-body" contenteditable="true" data-placeholder="What do you want to achieve?">${escapeHtml(c.text||'')}</div>`;
+    }
+    if(c.type==='quote'){
+      return `<div class="card-body" contenteditable="true" data-placeholder="Write something that motivates you">${escapeHtml(c.text||'')}</div>`;
+    }
+    if(c.type==='photo'){
+      const hasImg = c.imageUrl && c.imageUrl.trim().length>0;
+      return `
+        <div class="photo-frame">
+          ${hasImg
+            ? `<img src="${escapeAttr(c.imageUrl)}" onerror="this.parentElement.innerHTML='<div class=&quot;ph-empty&quot;>Couldn\\'t load that image link</div>'">`
+            : `<div class="ph-empty">Paste an image link below</div>`}
+        </div>
+        <input class="url-input" type="text" placeholder="https://... image link" value="${escapeAttr(c.imageUrl||'')}">
+        <div class="caption" contenteditable="true" data-placeholder="Caption this photo">${escapeHtml(c.caption||'')}</div>
+      `;
+    }
+    if(c.type==='checklist'){
+      return `<div class="checklist">${(c.items||[]).map((it,i)=>checklistItemHtml(it,i)).join('')}</div>
+              <button class="add-item-btn">+ add item</button>`;
+    }
+    return '';
+  }
+
+  function checklistItemHtml(it, i){
+    return `
+      <div class="cl-item ${it.done?'done':''}" data-idx="${i}">
+        <input type="checkbox" ${it.done?'checked':''}>
+        <span class="cl-text" contenteditable="true">${escapeHtml(it.text||'')}</span>
+        <button class="cl-del">✕</button>
+      </div>
+    `;
+  }
+
+  function wireInner(el, c){
+    if(c.type==='goal' || c.type==='quote'){
+      const body = el.querySelector('.card-body');
+      body.addEventListener('pointerdown', e=>e.stopPropagation());
+      body.addEventListener('blur', ()=>{
+        c.text = body.textContent.trim();
+        scheduleSave();
+      });
+    }
+
+    if(c.type==='photo'){
+      const urlInput = el.querySelector('.url-input');
+      const caption = el.querySelector('.caption');
+      urlInput.addEventListener('pointerdown', e=>e.stopPropagation());
+      urlInput.addEventListener('keydown', e=>e.stopPropagation());
+      urlInput.addEventListener('change', ()=>{
+        c.imageUrl = urlInput.value.trim();
+        const frame = el.querySelector('.photo-frame');
+        frame.innerHTML = c.imageUrl
+          ? `<img src="${escapeAttr(c.imageUrl)}" onerror="this.parentElement.innerHTML='<div class=&quot;ph-empty&quot;>Couldn\\'t load that image link</div>'">`
+          : `<div class="ph-empty">Paste an image link below</div>`;
+        scheduleSave();
+      });
+      caption.addEventListener('pointerdown', e=>e.stopPropagation());
+      caption.addEventListener('blur', ()=>{
+        c.caption = caption.textContent.trim();
+        scheduleSave();
+      });
+    }
+
+    if(c.type==='checklist'){
+      wireChecklist(el, c);
+      const addBtn = el.querySelector('.add-item-btn');
+      addBtn.addEventListener('pointerdown', e=>e.stopPropagation());
+      addBtn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        c.items = c.items || [];
+        c.items.push({text:'', done:false});
+        const listEl = el.querySelector('.checklist');
+        listEl.innerHTML = c.items.map((it,i)=>checklistItemHtml(it,i)).join('');
+        wireChecklist(el, c);
+        scheduleSave();
+        const lastText = listEl.querySelector('.cl-item:last-child .cl-text');
+        if(lastText) lastText.focus();
+      });
+    }
+  }
+
+  function wireChecklist(el, c){
+    const listEl = el.querySelector('.checklist');
+    listEl.querySelectorAll('.cl-item').forEach(itemEl=>{
+      const idx = parseInt(itemEl.dataset.idx, 10);
+      const cb = itemEl.querySelector('input[type=checkbox]');
+      const txt = itemEl.querySelector('.cl-text');
+      const delBtn = itemEl.querySelector('.cl-del');
+
+      cb.addEventListener('pointerdown', e=>e.stopPropagation());
+      cb.addEventListener('change', ()=>{
+        c.items[idx].done = cb.checked;
+        itemEl.classList.toggle('done', cb.checked);
+        scheduleSave();
+      });
+
+      txt.addEventListener('pointerdown', e=>e.stopPropagation());
+      txt.addEventListener('blur', ()=>{
+        c.items[idx].text = txt.textContent.trim();
+        scheduleSave();
+      });
+
+      delBtn.addEventListener('pointerdown', e=>e.stopPropagation());
+      delBtn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        c.items.splice(idx,1);
+        listEl.innerHTML = c.items.map((it,i)=>checklistItemHtml(it,i)).join('');
+        wireChecklist(el, c);
+        scheduleSave();
+      });
+    });
+  }
+
+  function wireDrag(el, c){
+    let dragging = false;
+    let offX=0, offY=0;
+
+    el.addEventListener('pointerdown', (e)=>{
+      // ignore if the target is editable / interactive
+      if(e.target.closest('[contenteditable="true"]') || e.target.tagName==='INPUT' || e.target.closest('.del-btn') || e.target.closest('.swatch') || e.target.closest('.cl-del') || e.target.closest('.add-item-btn')) return;
+      dragging = true;
+      el.classList.add('dragging');
+      el.setPointerCapture(e.pointerId);
+      const rect = el.getBoundingClientRect();
+      const boardRect = board.getBoundingClientRect();
+      offX = e.clientX - rect.left;
+      offY = e.clientY - rect.top;
+      topZ += 1;
+      el.style.zIndex = topZ;
+    });
+
+    el.addEventListener('pointermove', (e)=>{
+      if(!dragging) return;
+      const boardRect = board.getBoundingClientRect();
+      let nx = e.clientX - boardRect.left - offX;
+      let ny = e.clientY - boardRect.top - offY;
+      nx = Math.max(-40, nx);
+      ny = Math.max(0, ny);
+      el.style.left = nx + 'px';
+      el.style.top = ny + 'px';
+    });
+
+    function endDrag(e){
+      if(!dragging) return;
+      dragging = false;
+      el.classList.remove('dragging');
+      c.x = parseFloat(el.style.left);
+      c.y = parseFloat(el.style.top);
+      scheduleSave();
+    }
+    el.addEventListener('pointerup', endDrag);
+    el.addEventListener('pointercancel', endDrag);
+  }
+
+  function escapeHtml(str){
+    return (str||'').replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+  }
+  function escapeAttr(str){
+    return escapeHtml(str);
+  }
+
+  // toolbar: add cards
+  document.querySelectorAll('.tb-btn[data-add]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const type = btn.dataset.add;
+      const baseX = 60 + (state.cards.length * 26) % 500;
+      const baseY = 560 + (state.cards.length * 18) % 300;
+      const rot = (Math.random()*6 - 3);
+      const color = COLORS[Math.floor(Math.random()*COLORS.length)];
+      let card = {id:uid(), type, x:baseX, y:baseY, rot, color, label:type};
+      if(type==='goal') card.text = '';
+      if(type==='quote') card.text = '';
+      if(type==='photo'){ card.imageUrl=''; card.caption=''; }
+      if(type==='checklist') card.items = [{text:'', done:false}];
+      state.cards.push(card);
+      board.appendChild(buildCard(card));
+      scheduleSave();
     });
   });
-}
 
-function formatDate(d){
-  const dt = new Date(d + 'T00:00:00');
-  return dt.toLocaleDateString('en-US',{month:'short', day:'numeric', year:'numeric'});
-}
-
-function escapeHtml(str){
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
-
-$('addEntry').addEventListener('click', async ()=>{
-  const name = $('f-name').value.trim();
-  const cat = $('f-cat').value;
-  const org = $('f-org').value.trim();
-  const date = $('f-date').value;
-  const hours = $('f-hours').value;
-  const notes = $('f-notes').value.trim();
-
-  if(!name || !hours || !date){
-    showToast('Add a name, date, and hours first');
-    return;
-  }
-
-  entries.push({
-    id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
-    name, cat, org, date, hours: Number(hours), notes
+  document.getElementById('clearBoard').addEventListener('click', ()=>{
+    if(confirm('Clear the whole board? This removes all your cards.')){
+      state.cards = [];
+      renderAll();
+      scheduleSave();
+    }
   });
 
-  await saveEntries();
-  render();
-  showToast('Entry logged');
-
-  $('f-name').value = '';
-  $('f-org').value = '';
-  $('f-hours').value = '';
-  $('f-notes').value = '';
-});
-
-$('clearForm').addEventListener('click', ()=>{
-  $('f-name').value = '';
-  $('f-org').value = '';
-  $('f-hours').value = '';
-  $('f-notes').value = '';
-});
-
-$('exportBtn').addEventListener('click', ()=>{
-  if(entries.length === 0){
-    showToast('Nothing to copy yet');
-    return;
-  }
-  const totals = {};
-  let grand = 0;
-  entries.forEach(e=>{
-    totals[e.cat] = (totals[e.cat]||0) + Number(e.hours);
-    grand += Number(e.hours);
+  gradYearInput.addEventListener('pointerdown', e=>e.stopPropagation());
+  gradYearInput.addEventListener('change', ()=>{
+    state.gradYear = gradYearInput.value.trim();
+    scheduleSave();
   });
-  let out = `PREMED ACTIVITY SUMMARY — ${new Date().toLocaleDateString('en-US')}\n\n`;
-  Object.keys(CATS).forEach(key=>{
-    if(totals[key]) out += `${CATS[key].label}: ${totals[key].toFixed(1)} hrs\n`;
-  });
-  out += `\nTOTAL: ${grand.toFixed(1)} hrs\n\n---\n\n`;
-  const sorted = [...entries].sort((a,b)=> new Date(b.date) - new Date(a.date));
-  sorted.forEach(e=>{
-    out += `${formatDate(e.date)} | ${CATS[e.cat].label} | ${e.name} @ ${e.org||'—'} | ${Number(e.hours).toFixed(2)}h\n`;
-    if(e.notes) out += `   ${e.notes}\n`;
-  });
-  navigator.clipboard.writeText(out).then(()=>{
-    showToast('Summary copied to clipboard');
-  }).catch(()=>{
-    showToast('Could not copy — try selecting manually');
-  });
-});
 
-$('resetBtn').addEventListener('click', async ()=>{
-  if(!confirm('Delete all logged entries? This cannot be undone.')) return;
-  entries = [];
-  await saveEntries();
-  render();
-  showToast('All entries cleared');
-});
+  // export / import as a storage-independent fallback
+  document.getElementById('exportBoard').addEventListener('click', ()=>{
+    const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'vision-board.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
 
-initAuth();
+  const importInput = document.getElementById('importFile');
+  document.getElementById('importBoard').addEventListener('click', ()=> importInput.click());
+  importInput.addEventListener('change', (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev)=>{
+      try{
+        const parsed = JSON.parse(ev.target.result);
+        if(parsed && Array.isArray(parsed.cards)){
+          state = parsed;
+          gradYearInput.value = state.gradYear || '2030';
+          renderAll();
+          scheduleSave();
+        } else {
+          alert('That file doesn\'t look like a vision board export.');
+        }
+      }catch(err){
+        alert('Couldn\'t read that file: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+    importInput.value = '';
+  });
+
+  initAuth();
+})();
 </script>
 </body>
 </html>
