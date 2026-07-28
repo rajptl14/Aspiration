@@ -556,17 +556,15 @@
     return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
   }
 
-  async function initAuth(){
-    if(typeof window.storage === 'undefined' || typeof crypto === 'undefined' || !crypto.subtle){
-      // no persistent storage or no crypto available — skip the lock rather than block access
+  function initAuth(){
+    let storedHash = null;
+    try{ storedHash = localStorage.getItem(PASS_KEY); }catch(e){ /* no localStorage — skip the lock entirely */ }
+
+    if(typeof crypto === 'undefined' || !crypto.subtle){
+      // no crypto available (very old browser) — skip the lock rather than block access
       unlockApp();
       return;
     }
-    let storedHash = null;
-    try{
-      const res = await window.storage.get(PASS_KEY, false);
-      storedHash = res ? res.value : null;
-    }catch(e){ storedHash = null; }
 
     if(!storedHash){
       document.getElementById('lockSetup').style.display = 'flex';
@@ -584,10 +582,8 @@
       return;
     }
     const hash = await sha256(pass);
-    try{
-      await window.storage.set(PASS_KEY, hash, false);
-    }catch(e){
-      document.getElementById('setupError').textContent = "Couldn't save a password right now.";
+    try{ localStorage.setItem(PASS_KEY, hash); }catch(e){
+      document.getElementById('setupError').textContent = "Couldn't save a password on this device.";
       return;
     }
     document.getElementById('lockSetup').style.display = 'none';
@@ -615,19 +611,11 @@
   window.handleSetup = handleSetup;
   window.handleLogin = handleLogin;
 
-  async function load(){
-    if(typeof window.storage === 'undefined'){
-      storageWorking = false;
-      state = { gradYear:'2030', cards: starterCards() };
-      gradYearInput.value = state.gradYear;
-      renderAll();
-      saveStatus.textContent = 'no storage — session only';
-      return;
-    }
+  function load(){
     try{
-      const res = await window.storage.get(STORAGE_KEY, false);
-      if(res && res.value){
-        const parsed = JSON.parse(res.value);
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(raw){
+        const parsed = JSON.parse(raw);
         if(parsed && Array.isArray(parsed.cards)){
           state = parsed;
         } else {
@@ -638,9 +626,10 @@
       }
       setSaved(true);
     }catch(e){
-      // a throw here on first load usually just means the key doesn't exist yet
+      // localStorage unavailable (e.g. private browsing in some browsers) — fall back to session only
+      storageWorking = false;
       state = { gradYear:'2030', cards: starterCards() };
-      setSaved(true);
+      saveStatus.textContent = 'no storage — session only';
     }
     gradYearInput.value = state.gradYear || '2030';
     renderAll();
@@ -653,19 +642,15 @@
     }
     setSaved(false);
     clearTimeout(saveTimer);
-    saveTimer = setTimeout(async ()=>{
+    saveTimer = setTimeout(()=>{
       try{
-        const result = await window.storage.set(STORAGE_KEY, JSON.stringify(state), false);
-        if(!result){
-          saveStatus.textContent = 'save failed (no result)';
-          return;
-        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         setSaved(true);
       }catch(e){
         console.error('Vision board save error:', e);
         saveStatus.textContent = 'save failed: ' + (e && e.message ? e.message : 'unknown error');
       }
-    }, 500);
+    }, 400);
   }
 
   function setSaved(saved){
